@@ -1,0 +1,5 @@
+*.sqlite3
+.pytest_cache
+.github
+Pipfile
+Pipfile.lock
