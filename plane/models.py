@@ -3,8 +3,9 @@ from typing import Optional
 from django.db import models
 import datetime
 from django.contrib.auth.models import User
+from django.db.models import Q
 
-from plane.constants import MaintenanceStatus
+from plane.constants import MaintenanceProgress, MaintenanceStatus
 
 """
 Plane app: stored plane's info and maintenance record
@@ -27,15 +28,21 @@ class MaintenanceRecord(models.Model):
     name = models.CharField(max_length=128, default="maintenance")
     description = models.TextField()
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE)
-    status = models.CharField(
+    progress = models.CharField(
         choices=[
-            (MaintenanceStatus.pending, "pending"),
-            (MaintenanceStatus.in_progress, "in progress"),
-            (MaintenanceStatus.finished, "finished")
+            (MaintenanceProgress.pending, "pending"),
+            (MaintenanceProgress.in_progress, "in progress"),
+            (MaintenanceProgress.finished, "finished")
         ],
-        default=MaintenanceStatus.pending,
+        default=MaintenanceProgress.pending,
         max_length=128
     )
+
+    @property
+    def status(self) -> MaintenanceStatus:
+        now = datetime.datetime.now()
+        is_exist = MaintenanceRecordItem.objects.filter(Q(maintenance_record=self) & Q(expire_at__lt=now)).exists()
+        return MaintenanceStatus.expired if is_exist else MaintenanceStatus.good_condition
 
     @property
     def start_time(self) -> Optional[datetime.datetime]:
@@ -43,7 +50,7 @@ class MaintenanceRecord(models.Model):
         Get the maintenance start time
         :return:
         """
-        if self.status == MaintenanceStatus.pending:
+        if self.progress == MaintenanceProgress.pending:
             return None
         if MaintenanceRecordItem.objects.filter(maintenance_record=self).count() > 0:
             first_record = MaintenanceRecordItem.objects \
@@ -59,7 +66,7 @@ class MaintenanceRecord(models.Model):
         Get the maintenance end time
         :return:
         """
-        if self.status == MaintenanceStatus.finished:
+        if self.progress == MaintenanceProgress.finished:
             if MaintenanceRecordItem.objects.filter(maintenance_record=self).count() > 0:
                 last_record = MaintenanceRecordItem.objects \
                     .filter(maintenance_record=self) \
@@ -76,3 +83,4 @@ class MaintenanceRecordItem(models.Model):
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True)
+    expire_at = models.DateTimeField(null=True)
