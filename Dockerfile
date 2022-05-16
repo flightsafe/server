@@ -8,4 +8,4 @@ EXPOSE 8000
 
 WORKDIR /usr/local/app/server
 
-CMD ["gunicorn", "storage.wsgi"]
+CMD ["gunicorn", "server.wsgi"]
