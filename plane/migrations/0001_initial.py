@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(default='maintenance', max_length=128)),
                 ('description', models.TextField()),
-                ('status', models.CharField(choices=[(plane.constants.MaintenanceStatus['pending'], 'pending'), (plane.constants.MaintenanceStatus['in_progress'], 'in progress'), (plane.constants.MaintenanceStatus['finished'], 'finished')], default=plane.constants.MaintenanceStatus['pending'], max_length=128)),
+                ('status', models.CharField(choices=[(plane.constants.MaintenanceProgress['pending'], 'pending'), (plane.constants.MaintenanceProgress['in_progress'], 'in progress'), (plane.constants.MaintenanceProgress['finished'], 'finished')], default=plane.constants.MaintenanceProgress['pending'], max_length=128)),
             ],
         ),
         migrations.CreateModel(
