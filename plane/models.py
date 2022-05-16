@@ -26,13 +26,13 @@ class Plane(models.Model):
 
 class MaintenanceRecord(models.Model):
     name = models.CharField(max_length=128, default="maintenance")
-    description = models.TextField()
+    description = models.TextField(help_text="Maintenance record description")
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE)
     progress = models.CharField(
         choices=[
-            (MaintenanceProgress.pending, "pending"),
-            (MaintenanceProgress.in_progress, "in progress"),
-            (MaintenanceProgress.finished, "finished")
+            (MaintenanceProgress.pending.value, "pending"),
+            (MaintenanceProgress.in_progress.value, "in progress"),
+            (MaintenanceProgress.finished.value, "finished")
         ],
         default=MaintenanceProgress.pending,
         max_length=128
