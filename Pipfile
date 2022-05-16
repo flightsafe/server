@@ -10,6 +10,8 @@ coverage = "*"
 djangorestframework = "*"
 serializers = "*"
 django-filter = "*"
+pyyaml = "*"
+uritemplate = "*"
 
 [dev-packages]
 

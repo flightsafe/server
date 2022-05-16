@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "rest_framework",
     "plane",
-    "django_filters"
+    "django_filters",
+    "redoc"
 ]
 
 MIDDLEWARE = [

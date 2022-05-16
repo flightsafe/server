@@ -1,5 +1,7 @@
+from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
+from django.shortcuts import render
 from .serializers import MaintenanceRecordSerializer, MaintenanceRecordItemSerializer, PlaneSerializer
 from .models import Plane, MaintenanceRecord, MaintenanceRecordItem
 
@@ -9,7 +11,7 @@ class PlaneViewSet(viewsets.ModelViewSet):
     queryset = Plane.objects.all()
     serializer_class = PlaneSerializer
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = [""]
+    # filterset_fields = [""]
 
 
 class MaintenanceViewSet(viewsets.ModelViewSet):
