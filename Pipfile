@@ -13,7 +13,6 @@ django-filter = "*"
 pyyaml = "*"
 uritemplate = "*"
 django-cors-headers = "*"
-djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

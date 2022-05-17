@@ -93,7 +93,7 @@ DATABASES = {
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'common.pagination.TotalPageCountPagination',
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
-    'PAGE_SIZE': 25,
+    'PAGE_SIZE': 25
 }
 
 
