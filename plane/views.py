@@ -1,7 +1,5 @@
-from django.urls import reverse
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets
-from django.shortcuts import render
 from rest_framework.parsers import MultiPartParser
 
 from .serializers import MaintenanceRecordSerializer, MaintenanceRecordItemSerializer, PlaneSerializer, \
@@ -11,20 +9,17 @@ from .models import Plane, MaintenanceRecord, MaintenanceRecordItem
 
 # Create your views here.
 class PlaneViewSet(viewsets.ModelViewSet):
-    queryset = Plane.objects.all()
+    queryset = Plane.objects.order_by("id").all()
     serializer_class = PlaneSerializer
     filter_backends = [DjangoFilterBackend]
     parser_classes = [MultiPartParser]
 
-    def get_serializer_class(self):
-        if self.action == "retrieve":
-            return PlaneDetailSerializer
-        return super().get_serializer_class()
-
 
 class MaintenanceViewSet(viewsets.ModelViewSet):
-    queryset = MaintenanceRecord.objects.all()
+    queryset = MaintenanceRecord.objects.order_by("id").all()
     serializer_class = MaintenanceRecordSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['plane']
 
     def get_serializer_class(self):
         if self.action == "retrieve":

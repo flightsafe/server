@@ -2,7 +2,6 @@
 Plane app: stored plane's info and maintenance record
 """
 
-
 from typing import Optional
 
 from django.db import models
@@ -38,15 +37,21 @@ class MaintenanceRecord(models.Model):
             (MaintenanceProgress.in_progress.value, "in progress"),
             (MaintenanceProgress.finished.value, "finished")
         ],
-        default=MaintenanceProgress.pending,
+        default=MaintenanceProgress.pending.value,
         max_length=128
     )
 
     @property
     def status(self) -> MaintenanceStatus:
         now = datetime.datetime.now()
-        is_exist = MaintenanceRecordItem.objects.filter(Q(maintenance_record=self) & Q(expire_at__lt=now)).exists()
-        return MaintenanceStatus.expired if is_exist else MaintenanceStatus.good_condition
+        is_expired = MaintenanceRecordItem.objects.filter(Q(maintenance_record=self) & Q(expire_at__lt=now)).exists()
+        is_bad = MaintenanceRecordItem.objects.filter(
+            Q(maintenance_record=self) & Q(status=MaintenanceStatus.bad_condition)).exists()
+        if is_expired:
+            return MaintenanceStatus.expired.value
+        if is_bad:
+            return MaintenanceStatus.expired.value
+        return MaintenanceStatus.expired.good_condition
 
     @property
     def start_time(self) -> Optional[datetime.datetime]:
@@ -91,6 +96,12 @@ class MaintenanceRecordItem(models.Model):
     start_time = models.DateTimeField(null=True)
     end_time = models.DateTimeField(null=True, blank=True)
     expire_at = models.DateTimeField(null=True, blank=True)
+    status = models.CharField(max_length=128,
+                              choices=[
+                                  (MaintenanceStatus.good_condition.value, "good"),
+                                  (MaintenanceStatus.bad_condition.value, "bad"),
+                              ],
+                              default=MaintenanceStatus.good_condition.value)
 
     def __str__(self):
         return self.name

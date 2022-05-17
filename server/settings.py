@@ -40,10 +40,15 @@ INSTALLED_APPS = [
     "rest_framework",
     "plane",
     "django_filters",
-    "redoc"
+    "redoc",
+    "corsheaders"
 ]
 
+CORS_ALLOW_ALL_ORIGINS = True
+
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -87,7 +92,8 @@ DATABASES = {
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'common.pagination.TotalPageCountPagination',
-    'PAGE_SIZE': 20
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    'PAGE_SIZE': 25
 }
 
 
