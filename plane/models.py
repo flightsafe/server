@@ -1,3 +1,8 @@
+"""
+Plane app: stored plane's info and maintenance record
+"""
+
+
 from typing import Optional
 
 from django.db import models
@@ -7,13 +12,9 @@ from django.db.models import Q
 
 from plane.constants import MaintenanceProgress, MaintenanceStatus
 
-"""
-Plane app: stored plane's info and maintenance record
-"""
-
 
 class Plane(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField(max_length=128, unique=True)
     description = models.TextField()
     image = models.ImageField()
     created_time = models.DateTimeField(auto_now_add=True)
@@ -23,11 +24,14 @@ class Plane(models.Model):
         self.updated_time = datetime.datetime.now()
         super().save(force_insert, force_update, using, update_fields)
 
+    def __str__(self):
+        return self.name
+
 
 class MaintenanceRecord(models.Model):
     name = models.CharField(max_length=128, default="maintenance")
     description = models.TextField(help_text="Maintenance record description")
-    plane = models.ForeignKey(Plane, on_delete=models.CASCADE)
+    plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="records")
     progress = models.CharField(
         choices=[
             (MaintenanceProgress.pending.value, "pending"),
@@ -74,13 +78,19 @@ class MaintenanceRecord(models.Model):
                 return last_record.end_time
         return None
 
+    def __str__(self):
+        return self.name
+
 
 class MaintenanceRecordItem(models.Model):
-    maintenance_record = models.ForeignKey(MaintenanceRecord, on_delete=models.CASCADE)
+    maintenance_record = models.ForeignKey(MaintenanceRecord, on_delete=models.CASCADE, related_name="items")
     name = models.CharField(max_length=128)
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     start_time = models.DateTimeField(null=True)
-    end_time = models.DateTimeField(null=True)
-    expire_at = models.DateTimeField(null=True)
+    end_time = models.DateTimeField(null=True, blank=True)
+    expire_at = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return self.name
