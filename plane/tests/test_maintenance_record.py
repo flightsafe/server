@@ -20,7 +20,7 @@ class MaintenanceRecordTestCase(TestCase):
                                                   description="Test description")
         self.assertIsNone(record.start_time)
         self.assertIsNone(record.end_time)
-        self.assertEqual(record.progress, MaintenanceProgress.pending)
+        self.assertEqual(record.progress, MaintenanceProgress.pending.value)
 
     def test_maintenance_record_without_items_2(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
@@ -129,7 +129,7 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEquals(record.end_time.year, self.time_3.year)
 
         self.assertEqual(record.progress, MaintenanceProgress.finished)
-        self.assertEquals(record.status, MaintenanceStatus.expired)
+        self.assertEquals(record.status, MaintenanceStatus.expired.value)
 
     def test_expire_2(self):
         expire_time = datetime.now() + timedelta(days=2)
@@ -217,4 +217,4 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEquals(record.end_time.year, self.time_3.year)
 
         self.assertEqual(record.progress, MaintenanceProgress.finished)
-        self.assertEquals(record.status, MaintenanceStatus.expired)
+        self.assertEquals(record.status, MaintenanceStatus.expired.value)
