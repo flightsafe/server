@@ -9,4 +9,5 @@ class MaintenanceProgress(enum.Enum):
 
 class MaintenanceStatus(enum.Enum):
     good_condition = "GOOD_CONDITION"
+    bad_condition = "BAD_CONDITION"
     expired = "EXPIRED"

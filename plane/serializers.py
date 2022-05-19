@@ -3,6 +3,10 @@ from .models import Plane, MaintenanceRecord, MaintenanceRecordItem
 
 
 class MaintenanceRecordSerializer(serializers.ModelSerializer):
+    start_time = serializers.DateTimeField(read_only=True)
+    end_time = serializers.DateTimeField(read_only=True)
+    status = serializers.StringRelatedField(read_only=True)
+
     class Meta:
         model = MaintenanceRecord
         fields = "__all__"
@@ -25,6 +29,7 @@ class MaintenanceRecordDetailSerializer(serializers.ModelSerializer):
     start_time = serializers.DateTimeField(read_only=True)
     end_time = serializers.DateTimeField(read_only=True)
     status = serializers.StringRelatedField(read_only=True)
+    plane_name = serializers.StringRelatedField(read_only=True, source="plane")
 
     class Meta:
         model = MaintenanceRecord
