@@ -43,8 +43,8 @@ class Plane(models.Model):
         now = timezone.now()
         is_available = self.is_available(now, now)
         if not is_available:
-            return BookingStatus.in_use.value
-        return BookingStatus.not_in_use.value
+            return BookingStatus.in_use
+        return BookingStatus.not_in_use
 
     def __str__(self):
         return self.name
@@ -54,12 +54,9 @@ class MaintenanceRecord(models.Model):
     name = models.CharField(max_length=128, default="maintenance")
     description = models.TextField(help_text="Maintenance record description")
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="records")
+    author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
     progress = models.CharField(
-        choices=[
-            (MaintenanceProgress.pending.value, "pending"),
-            (MaintenanceProgress.in_progress.value, "in progress"),
-            (MaintenanceProgress.finished.value, "finished")
-        ],
+        choices=MaintenanceProgress.choices,
         default=MaintenanceProgress.pending.value,
         max_length=128
     )
@@ -120,11 +117,8 @@ class MaintenanceRecordItem(models.Model):
     end_time = models.DateTimeField(null=True, blank=True)
     expire_at = models.DateTimeField(null=True, blank=True)
     status = models.CharField(max_length=128,
-                              choices=[
-                                  (MaintenanceStatus.good_condition.value, "good"),
-                                  (MaintenanceStatus.bad_condition.value, "bad"),
-                              ],
-                              default=MaintenanceStatus.good_condition.value)
+                              choices=MaintenanceStatus.choices,
+                              default=MaintenanceStatus.good_condition)
 
     def __str__(self):
         return self.name

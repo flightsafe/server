@@ -3,7 +3,11 @@ from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 
 from booking import models as booking
+from common.constants import TransactionName
+from common.types import TransactionDetail
+from course.apps import CourseConfig
 from course.models import LessonHistory
+from transaction.models import TransactionInfo
 
 
 @receiver(pre_save, sender=LessonHistory)
@@ -26,10 +30,10 @@ def update_booking_record(sender, instance: LessonHistory, **kwargs):
     :return:
     """
     try:
+        detail = TransactionDetail(app_label=CourseConfig.name, model_name=LessonHistory.__name__, pk=instance.pk)
+        TransactionInfo.objects.create(name=TransactionName.create_lesson_record, details=detail, user=instance.student)
         booking.BookingRecord.objects.create(plane=instance.plane, start_time=instance.start_time,
                                              end_time=instance.end_time, user=instance.student, lesson=instance)
-        bookings = booking.BookingRecord.objects.all()[0]
-        print(bookings)
     except Exception as e:
         instance.delete()
         raise e
