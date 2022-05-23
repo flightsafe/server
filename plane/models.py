@@ -2,11 +2,11 @@
 Plane app: stored plane's info and maintenance record
 """
 
+import datetime
 from typing import Optional
 
-from django.db import models
-import datetime
 from django.contrib.auth.models import User
+from django.db import models
 from django.db.models import Q
 from django.utils import timezone
 
