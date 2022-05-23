@@ -8,8 +8,9 @@ from django.db import models
 import datetime
 from django.contrib.auth.models import User
 from django.db.models import Q
+from django.utils import timezone
 
-from plane.constants import MaintenanceProgress, MaintenanceStatus
+from common.constants import MaintenanceProgress, MaintenanceStatus, BookingStatus
 
 
 class Plane(models.Model):
@@ -20,8 +21,30 @@ class Plane(models.Model):
     updated_time = models.DateTimeField(auto_now_add=True)
 
     def save(self, force_insert=False, force_update=False, using=None, update_fields=None):
-        self.updated_time = datetime.datetime.now()
+        self.updated_time = timezone.now()
         super().save(force_insert, force_update, using, update_fields)
+
+    def is_available(self, start_time: datetime.datetime, end_time: datetime.datetime) -> bool:
+        """
+        Returns the if the plane is available during the time range
+        :param start_time:
+        :param end_time:
+        :return: true if the plane is available
+        """
+        is_in_use = self.bookings.filter(Q(start_time__lte=start_time) & Q(end_time__gte=end_time)).exists()
+        return not is_in_use
+
+    @property
+    def booking_status(self) -> BookingStatus:
+        """
+        Returns the currently booking status of the plane
+        :return:
+        """
+        now = timezone.now()
+        is_available = self.is_available(now, now)
+        if not is_available:
+            return BookingStatus.in_use.value
+        return BookingStatus.not_in_use.value
 
     def __str__(self):
         return self.name
@@ -43,7 +66,7 @@ class MaintenanceRecord(models.Model):
 
     @property
     def status(self) -> MaintenanceStatus:
-        now = datetime.datetime.now()
+        now = timezone.now()
         is_expired = MaintenanceRecordItem.objects.filter(Q(maintenance_record=self) & Q(expire_at__lt=now)).exists()
         is_bad = MaintenanceRecordItem.objects.filter(
             Q(maintenance_record=self) & Q(status=MaintenanceStatus.bad_condition)).exists()

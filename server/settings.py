@@ -37,10 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "rest_framework",
     "plane",
-    "django_filters",
     "redoc",
+    "booking",
+    "course",
+    "transaction",
+    "rest_framework",
+    "django_filters",
     "corsheaders"
 ]
 
