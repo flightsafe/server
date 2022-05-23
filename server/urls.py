@@ -5,6 +5,8 @@ from rest_framework.schemas import get_schema_view
 from django.conf.urls.static import static
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+from common.generator import OptionSchemaGenerator
+
 urlpatterns = [
                   path('admin/', admin.site.urls),
                   path("plane/", include("plane.urls")),
@@ -12,7 +14,8 @@ urlpatterns = [
                   path('spec/', get_schema_view(
                       title="Flight Safe",
                       description="Flight safe api spec",
-                      version="1.0.0"
+                      version="1.0.0",
+                      generator_class=OptionSchemaGenerator
                   ), name='spec'),
                   path('token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
                   path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
