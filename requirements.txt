@@ -1,11 +1,11 @@
 asgiref==3.5.2
-coverage==6.3.3
+coverage==6.4
 Django==4.0.4
 django-cors-headers==3.12.0
 django-filter==21.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.1.0
-drf-schema-adapter @ git+https://github.com/flightsafe/drf-schema-adapter@2b2140de83ee2c269b52fcccca0b4ba648ec4032
+drf-schema-adapter @ https://github.com/flightsafe/drf-schema-adapter/archive/refs/tags/2.1.1.zip
 future==0.18.2
 gunicorn==20.1.0
 Inflector==3.0.1

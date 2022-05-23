@@ -14,7 +14,7 @@ pyyaml = "*"
 uritemplate = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
-drf-schema-adapter = {git = "https://github.com/flightsafe/drf-schema-adapter"}
+drf-schema-adapter = {file = "https://github.com/flightsafe/drf-schema-adapter/archive/refs/tags/2.1.1.zip"}
 
 [dev-packages]
 
