@@ -1,5 +1,6 @@
 FROM python:3.10-slim
 WORKDIR /usr/local/app
+RUN apt update && apt install -y git
 COPY . .
 #COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
