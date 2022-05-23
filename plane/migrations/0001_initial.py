@@ -3,7 +3,7 @@
 from django.conf import settings
 from django.db import migrations, models
 import django.db.models.deletion
-import plane.constants
+import common.constants
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(default='maintenance', max_length=128)),
                 ('description', models.TextField(help_text='Maintenance record description')),
-                ('progress', models.CharField(choices=[('PENDING', 'pending'), ('IN_PROGRESS', 'in progress'), ('FINISHED', 'finished')], default=plane.constants.MaintenanceProgress['pending'], max_length=128)),
+                ('progress', models.CharField(choices=[('PENDING', 'pending'), ('IN_PROGRESS', 'in progress'), ('FINISHED', 'finished')], default=
+                common.constants.MaintenanceProgress['pending'], max_length=128)),
             ],
         ),
         migrations.CreateModel(

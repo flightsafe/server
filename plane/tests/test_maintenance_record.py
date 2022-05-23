@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 
 from django.test import TestCase
+from django.utils import timezone
 
-from ..constants import MaintenanceStatus
+from common.constants import MaintenanceStatus
 from ..models import Plane, MaintenanceRecord, MaintenanceProgress, MaintenanceRecordItem
 
 
@@ -10,9 +11,9 @@ class MaintenanceRecordTestCase(TestCase):
     def setUp(self) -> None:
         self.plane = Plane.objects.create(name="Plane 1", description="Mock Plane")
         self.plane2 = Plane.objects.create(name="Plane 2", description="Mock Plane")
-        self.time_1 = datetime(2020, 5, 31)
-        self.time_2 = datetime(2020, 6, 1)
-        self.time_3 = datetime(2020, 6, 2)
+        self.time_1 = datetime(2020, 5, 31, tzinfo=timezone.utc)
+        self.time_2 = datetime(2020, 6, 1, tzinfo=timezone.utc)
+        self.time_3 = datetime(2020, 6, 2, tzinfo=timezone.utc)
 
     def test_maintenance_record_without_items(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
@@ -32,7 +33,7 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEqual(record.progress, MaintenanceProgress.in_progress)
 
     def test_maintenance_record_with_items_1(self):
-        now = datetime.now()
+        now = timezone.now()
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
@@ -89,7 +90,7 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEquals(record.status, MaintenanceStatus.good_condition)
 
     def test_expire(self):
-        expire_time = datetime.now() - timedelta(days=2)
+        expire_time = timezone.now() - timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
@@ -132,7 +133,7 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEquals(record.status, MaintenanceStatus.expired.value)
 
     def test_expire_2(self):
-        expire_time = datetime.now() + timedelta(days=2)
+        expire_time = timezone.now() + timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
@@ -175,8 +176,8 @@ class MaintenanceRecordTestCase(TestCase):
         self.assertEquals(record.status, MaintenanceStatus.good_condition)
 
     def test_expire_3(self):
-        expire_time = datetime.now() - timedelta(days=2)
-        expire_time_2 = datetime.now() + timedelta(days=2)
+        expire_time = timezone.now() - timedelta(days=2)
+        expire_time_2 = timezone.now() + timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
