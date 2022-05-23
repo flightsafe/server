@@ -18,6 +18,13 @@ class CommentViewSet(viewsets.ModelViewSet):
     serializer_class = CommentSerializer
     filter_backends = [DjangoFilterBackend]
 
+    def create(self, request, *args, **kwargs):
+        request.data["author"] = request.user.pk
+        return super().create(request, *args, **kwargs)
+
+    def partial_update(self, request, *args, **kwargs):
+        return super().partial_update(request, *args, **kwargs)
+
 
 class LessonViewSet(viewsets.ModelViewSet):
     queryset = Lesson.objects.order_by("id").all()
@@ -31,3 +38,10 @@ class LessonHistoryViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = LessonHistorySerializer
     filter_backends = [DjangoFilterBackend]
+
+    def create(self, request, *args, **kwargs):
+        request.data["student"] = request.user.pk
+        return super().create(request, *args, **kwargs)
+
+
+

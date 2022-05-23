@@ -5,10 +5,10 @@ from django.core import exceptions
 from django.test import TestCase
 from django.utils import timezone
 
+from booking.apps import BookingConfig
+from booking.models import BookingRecord
 from plane.models import Plane
 from transaction.models import TransactionInfo, TransactionName, TransactionDetail
-from booking.models import BookingRecord
-from booking.apps import BookingConfig
 
 
 class TestTransactionInfo(TestCase):

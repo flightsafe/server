@@ -6,7 +6,7 @@ django-cors-headers==3.12.0
 django-filter==21.1
 djangorestframework==3.13.1
 djangorestframework-simplejwt==5.1.0
-drf-schema-adapter @ https://github.com/flightsafe/drf-schema-adapter/archive/refs/tags/2.1.1.zip
+drf-schema-adapter@ https://github.com/flightsafe/drf-schema-adapter/archive/refs/tags/2.1.1.zip
 future==0.18.2
 gunicorn==20.1.0
 Inflector==3.0.1

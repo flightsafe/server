@@ -1,7 +1,7 @@
-from django.contrib.auth.models import User, AnonymousUser
+from django.apps import apps
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django.apps import apps
 
 from common.constants import TransactionName
 from common.fields import DataclassJSONField
@@ -24,3 +24,6 @@ class TransactionInfo(models.Model):
         if details:
             model = apps.get_model(app_label=details.app_label, model_name=details.model_name)
             return model.objects.get(pk=details.pk)
+
+    def __str__(self):
+        return self.name

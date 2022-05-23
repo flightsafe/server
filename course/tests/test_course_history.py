@@ -21,7 +21,8 @@ class TestCourseHistory(TestCase):
     def test_create(self):
         lesson_history = LessonHistory.objects.create(plane=self.plane, start_time=self.now,
                                                       end_time=self.now + timedelta(days=1),
-                                                      student=self.user)
+                                                      student=self.user,
+                                                      lesson=self.lesson)
         self.assertEquals(LessonHistory.objects.count(), 1)
         self.assertEquals(BookingRecord.objects.count(), 1)
         bookings = BookingRecord.objects.all()[0]
@@ -33,7 +34,8 @@ class TestCourseHistory(TestCase):
         with self.assertRaises(expected_exception=exceptions.ValidationError):
             LessonHistory.objects.create(plane=self.plane, start_time=self.now,
                                          end_time=self.now + timedelta(days=1),
-                                         student=self.user)
+                                         student=self.user,
+                                         lesson=self.lesson)
 
         self.assertEquals(LessonHistory.objects.count(), 0)
         self.assertEquals(BookingRecord.objects.count(), 1)
@@ -42,7 +44,8 @@ class TestCourseHistory(TestCase):
         lesson_history = LessonHistory.objects.create(plane=self.plane, start_time=self.now,
                                                       end_time=self.now + timedelta(days=1),
                                                       student=self.user,
-                                                      grade=100)
+                                                      grade=100,
+                                                      lesson=self.lesson)
         self.assertEquals(BookingRecord.objects.count(), 1)
         lesson_history.delete()
         self.assertEquals(LessonHistory.objects.count(), 0)

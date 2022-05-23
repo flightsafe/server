@@ -19,6 +19,7 @@ class Lesson(models.Model):
 
 class LessonHistory(models.Model):
     plane = models.ForeignKey(plane.Plane, on_delete=models.CASCADE)
+    lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     start_time = models.DateTimeField(null=True, blank=True)
     end_time = models.DateTimeField(null=True, blank=True)
     student = models.ForeignKey(User, on_delete=models.CASCADE)
