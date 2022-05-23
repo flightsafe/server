@@ -24,7 +24,8 @@ class TestMaintenanceRecordView(TestCase):
         self.assertEquals(len(response.data["results"]), 0)
 
     def test_list(self):
-        models.MaintenanceRecord.objects.create(plane=self.plane, name="Hello world", description="Hello world")
+        models.MaintenanceRecord.objects.create(plane=self.plane, name="Hello world", description="Hello world",
+                                                author=self.user)
 
         view = views.MaintenanceViewSet.as_view({"get": ActionEnum.list.value})
         request = self.factory.get("/")
@@ -39,13 +40,13 @@ class TestMaintenanceRecordView(TestCase):
 
     def test_retrieve(self):
         record = models.MaintenanceRecord.objects.create(plane=self.plane, name="Hello world",
-                                                         description="Hello world")
+                                                         description="Hello world", author=self.user)
         models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
-                                                    maintenance_record=record)
+                                                    maintenance_record=record, operator=self.user)
         models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
-                                                    maintenance_record=record)
+                                                    maintenance_record=record, operator=self.user)
         models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
-                                                    maintenance_record=record)
+                                                    maintenance_record=record, operator=self.user)
 
         view = views.MaintenanceViewSet.as_view({"get": ActionEnum.retrieve.value})
         request = self.factory.get(f"/")

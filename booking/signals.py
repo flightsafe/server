@@ -1,10 +1,13 @@
 from django.core import exceptions
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
+from booking.apps import BookingConfig
 from booking.models import BookingRecord
-from common.constants import ErrorCode
+from common.constants import ErrorCode, TransactionName
+from common.types import TransactionDetail
+from transaction.models import TransactionInfo
 
 
 @receiver(pre_save, sender=BookingRecord)
@@ -21,3 +24,9 @@ def validating_booking_record(sender, instance: BookingRecord, **kwargs):
                 _(f"Plane is in use during {instance.start_time} and {instance.end_time}"),
                 code=ErrorCode.invalid)
         })
+
+
+@receiver(post_save, sender=BookingRecord)
+def write_transaction(sender, instance: BookingRecord, **kwargs):
+    detail = TransactionDetail(app_label=BookingConfig.name, model_name=BookingRecord.__name__, pk=instance.pk)
+    TransactionInfo.objects.create(name=TransactionName.create_booking, details=detail, user=instance.user)

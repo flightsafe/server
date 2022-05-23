@@ -15,5 +15,3 @@ class BookingViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         request.data["user"] = request.user.pk
         return super().create(request, *args, **kwargs)
-
-

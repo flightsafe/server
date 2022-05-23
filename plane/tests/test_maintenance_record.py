@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from django.utils import timezone
 
 from common.constants import MaintenanceStatus
+from transaction.models import TransactionInfo
 from ..models import Plane, MaintenanceRecord, MaintenanceProgress, MaintenanceRecordItem
 
 
@@ -14,20 +16,24 @@ class MaintenanceRecordTestCase(TestCase):
         self.time_1 = datetime(2020, 5, 31, tzinfo=timezone.utc)
         self.time_2 = datetime(2020, 6, 1, tzinfo=timezone.utc)
         self.time_3 = datetime(2020, 6, 2, tzinfo=timezone.utc)
+        self.user = User.objects.create(username="mock_user")
 
     def test_maintenance_record_without_items(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
-                                                  description="Test description")
+                                                  description="Test description",
+                                                  author=self.user)
         self.assertIsNone(record.start_time)
         self.assertIsNone(record.end_time)
         self.assertEqual(record.progress, MaintenanceProgress.pending.value)
+        self.assertEquals(TransactionInfo.objects.count(), 1)
 
     def test_maintenance_record_without_items_2(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.in_progress)
+                                                  progress=MaintenanceProgress.in_progress,
+                                                  author=self.user)
         self.assertIsNone(record.start_time)
         self.assertIsNone(record.end_time)
         self.assertEqual(record.progress, MaintenanceProgress.in_progress)
@@ -37,12 +43,14 @@ class MaintenanceRecordTestCase(TestCase):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.in_progress)
+                                                  progress=MaintenanceProgress.in_progress,
+                                                  author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
             name="item 1",
             description="description 1",
-            start_time=now
+            start_time=now,
+            operator=self.user
         )
         self.assertEquals(record.start_time.day, now.day)
         self.assertEquals(record.start_time.year, now.year)
@@ -53,13 +61,15 @@ class MaintenanceRecordTestCase(TestCase):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.finished)
+                                                  progress=MaintenanceProgress.finished,
+                                                  author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
             name="item 1",
             description="description 1",
             start_time=self.time_1,
-            end_time=self.time_1
+            end_time=self.time_1,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -67,7 +77,8 @@ class MaintenanceRecordTestCase(TestCase):
             name="item 2",
             description="description 2",
             start_time=self.time_2,
-            end_time=self.time_2
+            end_time=self.time_2,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -75,7 +86,8 @@ class MaintenanceRecordTestCase(TestCase):
             name="item 3",
             description="description 3",
             start_time=self.time_3,
-            end_time=self.time_3
+            end_time=self.time_3,
+            operator=self.user
         )
 
         self.assertEquals(record.start_time.day, self.time_1.day)
@@ -95,13 +107,15 @@ class MaintenanceRecordTestCase(TestCase):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.finished)
+                                                  progress=MaintenanceProgress.finished,
+                                                  author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
             name="item 1",
             description="description 1",
             start_time=self.time_1,
-            end_time=self.time_1
+            end_time=self.time_1,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -109,7 +123,8 @@ class MaintenanceRecordTestCase(TestCase):
             name="item 2",
             description="description 2",
             start_time=self.time_2,
-            end_time=self.time_2
+            end_time=self.time_2,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -118,7 +133,8 @@ class MaintenanceRecordTestCase(TestCase):
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
-            expire_at=expire_time
+            expire_at=expire_time,
+            operator=self.user
         )
 
         self.assertEquals(record.start_time.day, self.time_1.day)
@@ -138,13 +154,15 @@ class MaintenanceRecordTestCase(TestCase):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.finished)
+                                                  progress=MaintenanceProgress.finished,
+                                                  author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
             name="item 1",
             description="description 1",
             start_time=self.time_1,
-            end_time=self.time_1
+            end_time=self.time_1,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -152,7 +170,8 @@ class MaintenanceRecordTestCase(TestCase):
             name="item 2",
             description="description 2",
             start_time=self.time_2,
-            end_time=self.time_2
+            end_time=self.time_2,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -161,7 +180,8 @@ class MaintenanceRecordTestCase(TestCase):
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
-            expire_at=expire_time
+            expire_at=expire_time,
+            operator=self.user
         )
 
         self.assertEquals(record.start_time.day, self.time_1.day)
@@ -182,13 +202,15 @@ class MaintenanceRecordTestCase(TestCase):
         record = MaintenanceRecord.objects.create(plane=self.plane,
                                                   name="Test record",
                                                   description="Test description",
-                                                  progress=MaintenanceProgress.finished)
+                                                  progress=MaintenanceProgress.finished,
+                                                  author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
             name="item 1",
             description="description 1",
             start_time=self.time_1,
-            end_time=self.time_1
+            end_time=self.time_1,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -197,7 +219,8 @@ class MaintenanceRecordTestCase(TestCase):
             description="description 2",
             start_time=self.time_2,
             end_time=self.time_2,
-            expire_at=expire_time
+            expire_at=expire_time,
+            operator=self.user
         )
 
         MaintenanceRecordItem.objects.create(
@@ -206,7 +229,8 @@ class MaintenanceRecordTestCase(TestCase):
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
-            expire_at=expire_time_2
+            expire_at=expire_time_2,
+            operator=self.user,
         )
 
         self.assertEquals(record.start_time.day, self.time_1.day)

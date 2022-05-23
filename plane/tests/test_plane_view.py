@@ -39,9 +39,12 @@ class TestPlaneView(TestCase):
 
     def test_retrieve(self):
         plane = models.Plane.objects.create(name="Hello world", description="Hello world")
-        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world")
-        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world")
-        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world")
+        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world",
+                                                author=self.user)
+        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world",
+                                                author=self.user)
+        models.MaintenanceRecord.objects.create(plane=plane, name="Hello world", description="Hello world",
+                                                author=self.user)
 
         view = views.PlaneViewSet.as_view({"get": ActionEnum.retrieve.value})
         request = self.factory.get(f"/")
