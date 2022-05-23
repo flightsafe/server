@@ -1,12 +1,13 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import User
+from django.core import exceptions
 from django.test import TestCase
 from django.utils import timezone
-from django.core import exceptions
 
+from booking import models as booking
 from common.constants import BookingStatus
 from plane import models as plane
-from booking import models as booking
-from datetime import timedelta
 
 
 class TestBookingRecord(TestCase):

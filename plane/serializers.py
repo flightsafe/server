@@ -1,4 +1,5 @@
-from rest_framework import serializers, viewsets, routers
+from rest_framework import serializers
+
 from .models import Plane, MaintenanceRecord, MaintenanceRecordItem
 
 

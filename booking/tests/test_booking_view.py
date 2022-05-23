@@ -1,15 +1,15 @@
 from datetime import timedelta
 from http import HTTPStatus
-from django.test import TestCase
 
 from django.contrib.auth.models import User
+from django.test import TestCase
 from django.utils import timezone
 from rest_framework.test import APIRequestFactory, force_authenticate
 
-from common.action import ActionEnum
-from plane import models as plane
 from booking import models as booking
 from booking import views
+from common.action import ActionEnum
+from plane import models as plane
 
 
 class TestBookingView(TestCase):

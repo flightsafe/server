@@ -1,9 +1,11 @@
+from http import HTTPStatus
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIRequestFactory, force_authenticate
-from http import HTTPStatus
-from .. import models
+
 from common.action import ActionEnum
+from .. import models
 from .. import views
 
 
