@@ -7,7 +7,7 @@ from booking.serializers import BookingRecordSerializer
 
 class BookingViewSet(viewsets.ModelViewSet):
     queryset = BookingRecord.objects.order_by("id").all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = BookingRecordSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['plane']

@@ -11,7 +11,7 @@ from .serializers import MaintenanceRecordSerializer, MaintenanceRecordItemSeria
 # Create your views here.
 class PlaneViewSet(viewsets.ModelViewSet):
     queryset = Plane.objects.order_by("id").all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = PlaneSerializer
     filter_backends = [DjangoFilterBackend]
     parser_classes = [MultiPartParser]
@@ -19,7 +19,7 @@ class PlaneViewSet(viewsets.ModelViewSet):
 
 class MaintenanceViewSet(viewsets.ModelViewSet):
     queryset = MaintenanceRecord.objects.order_by("id").all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = MaintenanceRecordSerializer
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['plane']
@@ -33,4 +33,4 @@ class MaintenanceViewSet(viewsets.ModelViewSet):
 class MaintenanceRecordItemViewSet(viewsets.ModelViewSet):
     queryset = MaintenanceRecordItem.objects.all()
     serializer_class = MaintenanceRecordItemSerializer
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]

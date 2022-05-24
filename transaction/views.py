@@ -7,7 +7,7 @@ from .serializers import TransactionInfoSerializer
 
 class TransactionViewSet(viewsets.ModelViewSet):
     queryset = TransactionInfo.objects.order_by("id").all()
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    # permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     serializer_class = TransactionInfoSerializer
     filter_backends = [DjangoFilterBackend]
 
