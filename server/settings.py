@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-k*76(fx4mf%7=ru&fxd$nh1-gn8@0=n#231xlwis7m_0f1&88#
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -99,7 +99,7 @@ REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "common.generator.OptionViewSchema"
 }
 
-DRF_AUTO_METADATA_ADAPTER = 'drf_auto_endpoint.adapters.ReactJsonSchemaAdapter'
+DRF_AUTO_METADATA_ADAPTER = 'drf_auto_endpoint.adapters.EmberAdapter'
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
