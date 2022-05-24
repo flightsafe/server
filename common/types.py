@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Optional
 
 from dataclasses_json import dataclass_json
 
@@ -10,6 +10,6 @@ class TransactionDetail:
     """
     Store the related data of model
     """
-    app_label: str
-    model_name: str
-    pk: Any
+    app_label: Optional[str] = None
+    model_name: Optional[str] = None
+    pk: Optional[Any] = None

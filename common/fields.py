@@ -1,6 +1,7 @@
-from django.db import models
+from typing import Union
 
 from dataclasses_json import DataClassJsonMixin
+from django.db import models
 
 
 class DataclassJSONField(models.JSONField):
@@ -24,6 +25,8 @@ class DataclassJSONField(models.JSONField):
         db_value = super().from_db_value(value, expression, connection)
         return self.dataclass_cls.from_dict(db_value)
 
-    def get_prep_value(self, value: DataClassJsonMixin):
-        json_value = value.to_dict()
-        return super().get_prep_value(json_value)
+    def get_prep_value(self, value: Union[DataClassJsonMixin, dict]):
+        if type(value) != dict:
+            json_value = value.to_dict() if value else {}
+            return super().get_prep_value(json_value)
+        return super().get_prep_value(value)

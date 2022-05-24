@@ -19,7 +19,6 @@ class TotalPageCountPagination(pagination.PageNumberPagination):
 
         return prev_schema
 
-
     def get_paginated_response(self, data):
         return Response({
             'next': self.get_next_link(),

@@ -8,6 +8,7 @@ from common.types import TransactionDetail
 from course.apps import CourseConfig
 from course.models import LessonHistory
 from transaction.models import TransactionInfo
+from django.utils.translation import gettext_lazy as _
 
 
 @receiver(pre_save, sender=LessonHistory)
@@ -32,8 +33,9 @@ def update_booking_record(sender, instance: LessonHistory, **kwargs):
     try:
         detail = TransactionDetail(app_label=CourseConfig.name, model_name=LessonHistory.__name__, pk=instance.pk)
         TransactionInfo.objects.create(name=TransactionName.create_lesson_record, details=detail, user=instance.student)
-        booking.BookingRecord.objects.create(plane=instance.plane, start_time=instance.start_time,
-                                             end_time=instance.end_time, user=instance.student, lesson=instance)
+        if instance.start_time and instance.end_time:
+            booking.BookingRecord.objects.create(plane=instance.plane, start_time=instance.start_time,
+                                                 end_time=instance.end_time, user=instance.student, lesson=instance)
     except Exception as e:
         instance.delete()
         raise e
