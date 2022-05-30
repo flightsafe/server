@@ -15,13 +15,13 @@ class TestTransactionInfo(TestCase):
     def setUp(self) -> None:
         self.user = User.objects.create(username="user")
         self.now = timezone.now()
-        self.plane = Plane.objects.create(name="plane")
+        self.plane = Plane.objects.create(title="plane")
 
     def test_add_transaction(self):
         details = TransactionDetail(app_label=BookingConfig.name,
                                     model_name=BookingRecord.__name__,
                                     pk=1)
-        tx = TransactionInfo.objects.create(name=TransactionName.create_booking,
+        tx = TransactionInfo.objects.create(title=TransactionName.create_booking,
                                             details=details,
                                             user=self.user)
 
@@ -31,7 +31,7 @@ class TestTransactionInfo(TestCase):
         details = TransactionDetail(app_label=BookingConfig.name,
                                     model_name=BookingRecord.__name__,
                                     pk=1)
-        tx = TransactionInfo.objects.create(name=TransactionName.create_booking,
+        tx = TransactionInfo.objects.create(title=TransactionName.create_booking,
                                             details=details)
 
         self.assertEquals(tx.details, details)
@@ -41,7 +41,7 @@ class TestTransactionInfo(TestCase):
             details = TransactionDetail(app_label="invalid_app_label",
                                         model_name=BookingRecord.__name__,
                                         pk=1)
-            tx = TransactionInfo.objects.create(name=TransactionName.create_booking,
+            tx = TransactionInfo.objects.create(title=TransactionName.create_booking,
                                                 details=details,
                                                 user=self.user)
 
@@ -50,7 +50,7 @@ class TestTransactionInfo(TestCase):
             details = TransactionDetail(app_label=BookingConfig.name,
                                         model_name="invalid_model",
                                         pk=1)
-            tx = TransactionInfo.objects.create(name=TransactionName.create_booking,
+            tx = TransactionInfo.objects.create(title=TransactionName.create_booking,
                                                 details=details,
                                                 user=self.user)
 
@@ -61,7 +61,7 @@ class TestTransactionInfo(TestCase):
         details = TransactionDetail(app_label=BookingConfig.name,
                                     model_name=BookingRecord.__name__,
                                     pk=booking_record.pk)
-        tx = TransactionInfo.objects.create(name=TransactionName.create_booking,
+        tx = TransactionInfo.objects.create(title=TransactionName.create_booking,
                                             details=details,
                                             user=self.user)
 

@@ -14,8 +14,8 @@ class PlaneViewSet(viewsets.ModelViewSet):
     serializer_class = PlaneSerializer
     filter_backends = [DjangoFilterBackend]
     parser_classes = [MultiPartParser]
-    filterset_fields = ['name', "description", "id"]
-    search_fields = ["name"]
+    filterset_fields = ['title', "description", "id"]
+    search_fields = ["title"]
 
 
 class MaintenanceViewSet(viewsets.ModelViewSet):
@@ -25,7 +25,7 @@ class MaintenanceViewSet(viewsets.ModelViewSet):
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['plane']
     ordering_fields = ["progress"]
-    search_fields = ["name"]
+    search_fields = ["title"]
 
     def get_serializer_class(self):
         if self.action == "retrieve":

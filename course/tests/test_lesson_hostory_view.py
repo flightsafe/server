@@ -12,11 +12,11 @@ from plane.models import Plane
 
 class LessonHistoryTest(TestCase):
     def setUp(self):
-        self.course = Course.objects.create(name="Test Course", description="Test Description")
+        self.course = Course.objects.create(title="Test Course", description="Test Description")
         self.user = User.objects.create_user(username="testuser", password="testpassword")
         self.factory = APIRequestFactory()
-        self.lesson = Lesson.objects.create(name="Test Lesson", description="Test Description", course=self.course)
-        self.plane = Plane.objects.create(name="plane")
+        self.lesson = Lesson.objects.create(title="Test Lesson", description="Test Description", course=self.course)
+        self.plane = Plane.objects.create(title="plane")
 
     def test_list_view(self):
         view = LessonHistoryViewSet.as_view({"get": ActionEnum.list.value})

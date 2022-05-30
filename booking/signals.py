@@ -29,4 +29,4 @@ def validating_booking_record(sender, instance: BookingRecord, **kwargs):
 @receiver(post_save, sender=BookingRecord)
 def write_transaction(sender, instance: BookingRecord, **kwargs):
     detail = TransactionDetail(app_label=BookingConfig.name, model_name=BookingRecord.__name__, pk=instance.pk)
-    TransactionInfo.objects.create(name=TransactionName.create_booking, details=detail, user=instance.user)
+    TransactionInfo.objects.create(title=TransactionName.create_booking, details=detail, user=instance.user)

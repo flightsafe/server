@@ -11,7 +11,7 @@ from plane import views, models
 class TestMaintenanceRecordView(TestCase):
     def setUp(self) -> None:
         self.factory = APIRequestFactory()
-        self.plane = models.Plane.objects.create(name="Hello world", description="Hello world")
+        self.plane = models.Plane.objects.create(title="Hello world", description="Hello world")
         self.user = User.objects.create(username="test_user")
 
     def test_list_without_content(self):
@@ -24,7 +24,7 @@ class TestMaintenanceRecordView(TestCase):
         self.assertEquals(len(response.data["results"]), 0)
 
     def test_list(self):
-        models.MaintenanceRecord.objects.create(plane=self.plane, name="Hello world", description="Hello world",
+        models.MaintenanceRecord.objects.create(plane=self.plane, title="Hello world", description="Hello world",
                                                 author=self.user)
 
         view = views.MaintenanceViewSet.as_view({"get": ActionEnum.list.value})
@@ -36,16 +36,16 @@ class TestMaintenanceRecordView(TestCase):
         self.assertEquals(len(response.data["results"]), 1)
 
         result = dict(response.data["results"][0])
-        self.assertEquals(result, {"name": "Hello world", "description": "Hello world"} | result)
+        self.assertEquals(result, {"title": "Hello world", "description": "Hello world"} | result)
 
     def test_retrieve(self):
-        record = models.MaintenanceRecord.objects.create(plane=self.plane, name="Hello world",
+        record = models.MaintenanceRecord.objects.create(plane=self.plane, title="Hello world",
                                                          description="Hello world", author=self.user)
-        models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
+        models.MaintenanceRecordItem.objects.create(title="Hello world", description="Hello world",
                                                     maintenance_record=record, operator=self.user)
-        models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
+        models.MaintenanceRecordItem.objects.create(title="Hello world", description="Hello world",
                                                     maintenance_record=record, operator=self.user)
-        models.MaintenanceRecordItem.objects.create(name="Hello world", description="Hello world",
+        models.MaintenanceRecordItem.objects.create(title="Hello world", description="Hello world",
                                                     maintenance_record=record, operator=self.user)
 
         view = views.MaintenanceViewSet.as_view({"get": ActionEnum.retrieve.value})
@@ -54,5 +54,5 @@ class TestMaintenanceRecordView(TestCase):
         response = view(request, pk=record.pk)
         self.assertEquals(response.status_code, HTTPStatus.OK)
         result = dict(response.data)
-        self.assertEquals(result, {"name": "Hello world", "description": "Hello world"} | result)
+        self.assertEquals(result, {"title": "Hello world", "description": "Hello world"} | result)
         self.assertEquals(len(result["items"]), 3)

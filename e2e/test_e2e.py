@@ -32,7 +32,7 @@ class E2ETesting(APITestCase):
     def test_basic_browsing(self):
         # create a plane
         url = reverse("plane-list")
-        response = self.client.post(url, data={"name": "Test Plane", "description": "Test Description",
+        response = self.client.post(url, data={"title": "Test Plane", "description": "Test Description",
                                                "image": temporary_image()}, format="multipart")
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertEqual(Plane.objects.count(), 1)
@@ -40,7 +40,7 @@ class E2ETesting(APITestCase):
         url = reverse("plane-detail", kwargs={"pk": Plane.objects.first().pk})
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
-        self.assertEqual(response.data["name"], "Test Plane")
+        self.assertEqual(response.data["title"], "Test Plane")
         self.assertEqual(response.data["description"], "Test Description")
 
         # Create a maintenance record
@@ -54,20 +54,20 @@ class E2ETesting(APITestCase):
         url = reverse("maintenance-item-list")
         response = self.client.post(url, data={"maintenance_record": MaintenanceRecord.objects.first().pk,
                                                "description": "Test Description", "image": temporary_image(),
-                                               "name": "Test item"},
+                                               "title": "Test item"},
                                     format="multipart")
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertEqual(MaintenanceRecordItem.objects.count(), 1)
 
         # create a course
         url = reverse("course-list")
-        response = self.client.post(url, data={"name": "Test Course", "description": "Test Description"})
+        response = self.client.post(url, data={"title": "Test Course", "description": "Test Description"})
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertEqual(Course.objects.count(), 1)
 
         # create a lesson
         url = reverse("lesson-list")
-        response = self.client.post(url, data={"name": "Test Lesson", "description": "Test Description",
+        response = self.client.post(url, data={"title": "Test Lesson", "description": "Test Description",
                                                "course": 1}, format="multipart")
         self.assertEqual(response.status_code, HTTPStatus.CREATED)
         self.assertEqual(Lesson.objects.count(), 1)
@@ -90,7 +90,7 @@ class E2ETesting(APITestCase):
         self.assertEqual(TransactionInfo.objects.count(), 4)
 
         transactions = TransactionInfo.objects.all()
-        self.assertEqual(transactions[0].name, TransactionName.add_maintenance_item)
-        self.assertEqual(transactions[1].name, TransactionName.add_maintenance_item)
-        self.assertEqual(transactions[2].name, TransactionName.create_lesson_record)
-        self.assertEqual(transactions[3].name, TransactionName.create_booking)
+        self.assertEqual(transactions[0].title, TransactionName.add_maintenance_item)
+        self.assertEqual(transactions[1].title, TransactionName.add_maintenance_item)
+        self.assertEqual(transactions[2].title, TransactionName.create_lesson_record)
+        self.assertEqual(transactions[3].title, TransactionName.create_booking)

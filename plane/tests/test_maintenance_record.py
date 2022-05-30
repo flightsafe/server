@@ -11,8 +11,8 @@ from ..models import Plane, MaintenanceRecord, MaintenanceProgress, MaintenanceR
 
 class MaintenanceRecordTestCase(TestCase):
     def setUp(self) -> None:
-        self.plane = Plane.objects.create(name="Plane 1", description="Mock Plane")
-        self.plane2 = Plane.objects.create(name="Plane 2", description="Mock Plane")
+        self.plane = Plane.objects.create(title="Plane 1", description="Mock Plane")
+        self.plane2 = Plane.objects.create(title="Plane 2", description="Mock Plane")
         self.time_1 = datetime(2020, 5, 31, tzinfo=timezone.utc)
         self.time_2 = datetime(2020, 6, 1, tzinfo=timezone.utc)
         self.time_3 = datetime(2020, 6, 2, tzinfo=timezone.utc)
@@ -20,7 +20,7 @@ class MaintenanceRecordTestCase(TestCase):
 
     def test_maintenance_record_without_items(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   author=self.user)
         self.assertIsNone(record.start_time)
@@ -30,7 +30,7 @@ class MaintenanceRecordTestCase(TestCase):
 
     def test_maintenance_record_without_items_2(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.in_progress,
                                                   author=self.user)
@@ -41,13 +41,13 @@ class MaintenanceRecordTestCase(TestCase):
     def test_maintenance_record_with_items_1(self):
         now = timezone.now()
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.in_progress,
                                                   author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 1",
+            title="item 1",
             description="description 1",
             start_time=now,
             operator=self.user
@@ -59,13 +59,13 @@ class MaintenanceRecordTestCase(TestCase):
 
     def test_maintenance_record_with_items_2(self):
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.finished,
                                                   author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 1",
+            title="item 1",
             description="description 1",
             start_time=self.time_1,
             end_time=self.time_1,
@@ -74,7 +74,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 2",
+            title="item 2",
             description="description 2",
             start_time=self.time_2,
             end_time=self.time_2,
@@ -83,7 +83,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 3",
+            title="item 3",
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
@@ -105,13 +105,13 @@ class MaintenanceRecordTestCase(TestCase):
         expire_time = timezone.now() - timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.finished,
                                                   author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 1",
+            title="item 1",
             description="description 1",
             start_time=self.time_1,
             end_time=self.time_1,
@@ -120,7 +120,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 2",
+            title="item 2",
             description="description 2",
             start_time=self.time_2,
             end_time=self.time_2,
@@ -129,7 +129,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 3",
+            title="item 3",
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
@@ -152,13 +152,13 @@ class MaintenanceRecordTestCase(TestCase):
         expire_time = timezone.now() + timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.finished,
                                                   author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 1",
+            title="item 1",
             description="description 1",
             start_time=self.time_1,
             end_time=self.time_1,
@@ -167,7 +167,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 2",
+            title="item 2",
             description="description 2",
             start_time=self.time_2,
             end_time=self.time_2,
@@ -176,7 +176,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 3",
+            title="item 3",
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,
@@ -200,13 +200,13 @@ class MaintenanceRecordTestCase(TestCase):
         expire_time_2 = timezone.now() + timedelta(days=2)
 
         record = MaintenanceRecord.objects.create(plane=self.plane,
-                                                  name="Test record",
+                                                  title="Test record",
                                                   description="Test description",
                                                   progress=MaintenanceProgress.finished,
                                                   author=self.user)
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 1",
+            title="item 1",
             description="description 1",
             start_time=self.time_1,
             end_time=self.time_1,
@@ -215,7 +215,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 2",
+            title="item 2",
             description="description 2",
             start_time=self.time_2,
             end_time=self.time_2,
@@ -225,7 +225,7 @@ class MaintenanceRecordTestCase(TestCase):
 
         MaintenanceRecordItem.objects.create(
             maintenance_record=record,
-            name="item 3",
+            title="item 3",
             description="description 3",
             start_time=self.time_3,
             end_time=self.time_3,

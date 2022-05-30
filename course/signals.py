@@ -32,7 +32,7 @@ def update_booking_record(sender, instance: LessonHistory, **kwargs):
     """
     try:
         detail = TransactionDetail(app_label=CourseConfig.name, model_name=LessonHistory.__name__, pk=instance.pk)
-        TransactionInfo.objects.create(name=TransactionName.create_lesson_record, details=detail, user=instance.student)
+        TransactionInfo.objects.create(title=TransactionName.create_lesson_record, details=detail, user=instance.student)
         if instance.start_time and instance.end_time:
             booking.BookingRecord.objects.create(plane=instance.plane, start_time=instance.start_time,
                                                  end_time=instance.end_time, user=instance.student, lesson=instance)

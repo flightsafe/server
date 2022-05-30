@@ -13,7 +13,7 @@ def update_maintenance(sender, instance: MaintenanceRecord, **kwargs):
     detail = TransactionDetail(app_label=PlaneConfig.name,
                                model_name=MaintenanceRecordItem.__name__,
                                pk=instance.pk)
-    TransactionInfo.objects.create(name=TransactionName.add_maintenance_item, details=detail, user=instance.author)
+    TransactionInfo.objects.create(title=TransactionName.add_maintenance_item, details=detail, user=instance.author)
 
 
 @receiver(post_save, sender=MaintenanceRecordItem)
@@ -21,4 +21,4 @@ def update_maintenance_item(sender, instance: MaintenanceRecordItem, **kwargs):
     detail = TransactionDetail(app_label=PlaneConfig.name,
                                model_name=MaintenanceRecordItem.__name__,
                                pk=instance.pk)
-    TransactionInfo.objects.create(name=TransactionName.add_maintenance_item, details=detail, user=instance.operator)
+    TransactionInfo.objects.create(title=TransactionName.add_maintenance_item, details=detail, user=instance.operator)
