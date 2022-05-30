@@ -13,3 +13,6 @@ class BookingRecord(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
+
+    def __str__(self):
+        return self.start_time

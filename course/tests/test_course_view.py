@@ -12,7 +12,7 @@ from plane.models import Plane
 
 class CourseViewTest(TestCase):
     def setUp(self) -> None:
-        self.plane = Plane.objects.create(name="Test Plane")
+        self.plane = Plane.objects.create(title="Test Plane")
         self.user = User.objects.create_user(username="testuser", password="testpassword")
         self.factory = APIRequestFactory()
 
@@ -26,8 +26,8 @@ class CourseViewTest(TestCase):
         self.assertEquals(len(response.data["results"]), 0)
 
     def test_list_view_2(self):
-        Course.objects.create(name="Test Course", description="Test Description")
-        Course.objects.create(name="Test Course", description="Test Description")
+        Course.objects.create(title="Test Course", description="Test Description")
+        Course.objects.create(title="Test Course", description="Test Description")
 
         view = CourseViewSet.as_view({"get": ActionEnum.list.value})
         request = self.factory.get("/")
@@ -38,30 +38,30 @@ class CourseViewTest(TestCase):
         self.assertEquals(len(response.data["results"]), 2)
 
     def test_retrieve_view(self):
-        course = Course.objects.create(name="Test Course", description="Test Description")
+        course = Course.objects.create(title="Test Course", description="Test Description")
         view = CourseViewSet.as_view({"get": ActionEnum.retrieve.value})
         request = self.factory.get("/")
         force_authenticate(request, self.user)
         response = view(request, pk=course.pk)
         self.assertEquals(response.status_code, HTTPStatus.OK)
-        self.assertEquals(response.data["name"], "Test Course")
+        self.assertEquals(response.data["title"], "Test Course")
         self.assertEquals(response.data["description"], "Test Description")
 
     def test_create_view(self):
         view = CourseViewSet.as_view({"post": ActionEnum.create.value})
-        request = self.factory.post("/", {"name": "Test Course", "description": "Test Description"})
+        request = self.factory.post("/", {"title": "Test Course", "description": "Test Description"})
         force_authenticate(request, self.user)
         response = view(request)
         self.assertEquals(response.status_code, HTTPStatus.CREATED)
-        self.assertEquals(response.data["name"], "Test Course")
+        self.assertEquals(response.data["title"], "Test Course")
         self.assertEquals(response.data["description"], "Test Description")
 
     def test_update_view(self):
-        course = Course.objects.create(name="Test Course", description="Test Description")
+        course = Course.objects.create(title="Test Course", description="Test Description")
         view = CourseViewSet.as_view({"put": ActionEnum.update.value})
-        request = self.factory.put("/", {"name": "Test Course", "description": "Test Description"})
+        request = self.factory.put("/", {"title": "Test Course", "description": "Test Description"})
         force_authenticate(request, self.user)
         response = view(request, pk=course.pk)
         self.assertEquals(response.status_code, HTTPStatus.OK)
-        self.assertEquals(response.data["name"], "Test Course")
+        self.assertEquals(response.data["title"], "Test Course")
         self.assertEquals(response.data["description"], "Test Description")

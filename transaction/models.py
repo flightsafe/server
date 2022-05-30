@@ -9,7 +9,7 @@ from common.types import TransactionDetail
 
 
 class TransactionInfo(models.Model):
-    name = models.CharField(max_length=128, choices=TransactionName.choices)
+    title = models.CharField(max_length=128, choices=TransactionName.choices)
     details = DataclassJSONField(null=True, blank=True, help_text=_("Transaction details"),
                                  dataclass_cls=TransactionDetail)
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
@@ -26,4 +26,4 @@ class TransactionInfo(models.Model):
             return model.objects.get(pk=details.pk)
 
     def __str__(self):
-        return self.name
+        return self.title

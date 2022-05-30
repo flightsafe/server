@@ -12,8 +12,8 @@ from plane import models as plane
 
 class TestBookingRecord(TestCase):
     def setUp(self) -> None:
-        self.plane_1 = plane.Plane.objects.create(name="plane_1")
-        self.plane_2 = plane.Plane.objects.create(name="plane_2")
+        self.plane_1 = plane.Plane.objects.create(title="plane_1")
+        self.plane_2 = plane.Plane.objects.create(title="plane_2")
         self.user = User.objects.create(username="mock_user")
         self.now = timezone.now()
 

@@ -12,10 +12,10 @@ from plane.models import Plane
 
 class TestCourseHistory(TestCase):
     def setUp(self) -> None:
-        self.plane = Plane.objects.create(name="plane")
+        self.plane = Plane.objects.create(title="plane")
         self.now = timezone.now()
-        self.course = Course.objects.create(name="Course 1", description="Course 1")
-        self.lesson = Lesson.objects.create(course=self.course, name="Lesson", description="Lesson")
+        self.course = Course.objects.create(title="Course 1", description="Course 1")
+        self.lesson = Lesson.objects.create(course=self.course, title="Lesson", description="Lesson")
         self.user = User.objects.create(username="user")
 
     def test_create(self):

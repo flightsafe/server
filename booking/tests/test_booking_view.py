@@ -15,7 +15,7 @@ from plane import models as plane
 class TestBookingView(TestCase):
     def setUp(self) -> None:
         self.factory = APIRequestFactory()
-        self.plane = plane.Plane.objects.create(name="Hello world", description="Hello world")
+        self.plane = plane.Plane.objects.create(title="Hello world", description="Hello world")
         self.user = User.objects.create(username="test_user")
 
     def test_list(self):

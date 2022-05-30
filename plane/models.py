@@ -14,7 +14,7 @@ from common.constants import MaintenanceProgress, MaintenanceStatus, BookingStat
 
 
 class Plane(models.Model):
-    name = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=True)
     description = models.TextField()
     image = models.ImageField()
     created_time = models.DateTimeField(auto_now_add=True)
@@ -47,11 +47,11 @@ class Plane(models.Model):
         return BookingStatus.not_in_use
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class MaintenanceRecord(models.Model):
-    name = models.CharField(max_length=128, default="maintenance")
+    title = models.CharField(max_length=128, default="maintenance")
     description = models.TextField(help_text="Maintenance record description")
     plane = models.ForeignKey(Plane, on_delete=models.CASCADE, related_name="records")
     author = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
@@ -104,12 +104,12 @@ class MaintenanceRecord(models.Model):
         return None
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class MaintenanceRecordItem(models.Model):
     maintenance_record = models.ForeignKey(MaintenanceRecord, on_delete=models.CASCADE, related_name="items")
-    name = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     description = models.TextField()
     image = models.ImageField(blank=True, null=True)
     operator = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -121,4 +121,4 @@ class MaintenanceRecordItem(models.Model):
                               default=MaintenanceStatus.good_condition)
 
     def __str__(self):
-        return self.name
+        return self.title

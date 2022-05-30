@@ -6,14 +6,14 @@ from plane import models as plane
 
 
 class Course(models.Model):
-    name = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     description = models.TextField()
     cover = models.ImageField(blank=True, null=True)
 
 
 class Lesson(models.Model):
     course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    name = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     description = models.TextField()
 
 
