@@ -10,7 +10,7 @@ class MaintenanceRecordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MaintenanceRecord
-        fields = "__all__"
+        exclude = ["author"]
 
 
 class MaintenanceRecordItemSerializer(serializers.ModelSerializer):
@@ -20,6 +20,12 @@ class MaintenanceRecordItemSerializer(serializers.ModelSerializer):
 
 
 class PlaneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Plane
+        exclude = ["description"]
+
+
+class PlaneDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = Plane
         fields = "__all__"

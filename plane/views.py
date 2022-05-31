@@ -4,7 +4,7 @@ from rest_framework.parsers import MultiPartParser
 
 from .models import Plane, MaintenanceRecord, MaintenanceRecordItem
 from .serializers import MaintenanceRecordSerializer, MaintenanceRecordItemSerializer, PlaneSerializer, \
-    MaintenanceRecordDetailSerializer
+    MaintenanceRecordDetailSerializer, PlaneDetailSerializer
 
 
 # Create your views here.
@@ -16,6 +16,11 @@ class PlaneViewSet(viewsets.ModelViewSet):
     parser_classes = [MultiPartParser]
     filterset_fields = ['title', "description", "id"]
     search_fields = ["title"]
+
+    def get_serializer_class(self):
+        if self.action == "retrieve":
+            return PlaneDetailSerializer
+        return super().get_serializer_class()
 
 
 class MaintenanceViewSet(viewsets.ModelViewSet):
