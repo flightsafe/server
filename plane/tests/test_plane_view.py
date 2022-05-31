@@ -35,7 +35,7 @@ class TestPlaneView(TestCase):
         self.assertEquals(len(response.data["results"]), 1)
 
         result = dict(response.data["results"][0])
-        self.assertEquals(result, {"title": "Hello world", "description": "Hello world"} | result)
+        self.assertEquals(result, {"title": "Hello world"} | result)
 
     def test_retrieve(self):
         plane = models.Plane.objects.create(title="Hello world", description="Hello world")

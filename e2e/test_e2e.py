@@ -41,7 +41,7 @@ class E2ETesting(APITestCase):
         response = self.client.get(url)
         self.assertEqual(response.status_code, HTTPStatus.OK)
         self.assertEqual(response.data["title"], "Test Plane")
-        self.assertEqual(response.data["description"], "Test Description")
+        self.assertEqual(response.data["description"], '')
 
         # Create a maintenance record
         url = reverse("maintenance-list")
