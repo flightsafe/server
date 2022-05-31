@@ -11,9 +11,13 @@ from common.generator import OptionSchemaGenerator
 from course.urls import router as course_router
 from plane.urls import router as plane_router
 from transaction.urls import router as transaction_router
+from . import views
 
 router = routers.DefaultRouter()
-router.registry = plane_router.registry + booking_router.registry + transaction_router.registry + course_router.registry
+user_router = routers.DefaultRouter()
+
+user_router.register("user", views.UserViewSet)
+router.registry = plane_router.registry + booking_router.registry + transaction_router.registry + course_router.registry + user_router.registry
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

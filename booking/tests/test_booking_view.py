@@ -1,3 +1,4 @@
+import datetime
 from datetime import timedelta
 from http import HTTPStatus
 
@@ -42,3 +43,52 @@ class TestBookingView(TestCase):
         response = view(request)
         self.assertEquals(response.status_code, HTTPStatus.CREATED)
         self.assertEquals(booking.BookingRecord.objects.count(), 1)
+
+
+class TestBookingViewWithQuery(TestCase):
+    def setUp(self) -> None:
+        self.factory = APIRequestFactory()
+        self.plane = plane.Plane.objects.create(title="Hello world", description="Hello world")
+        self.user = User.objects.create(username="test_user")
+        first_time = datetime.datetime(year=2020, month=5, day=2)
+        second_time = datetime.datetime(year=2020, month=6, day=1)
+        third_time = datetime.datetime(year=2020, month=7, day=31)
+        booking.BookingRecord.objects.create(plane=self.plane, start_time=first_time,
+                                             end_time=first_time + timedelta(days=1),
+                                             user=self.user)
+        booking.BookingRecord.objects.create(plane=self.plane, start_time=second_time,
+                                             end_time=second_time + timedelta(days=30),
+                                             user=self.user)
+
+        booking.BookingRecord.objects.create(plane=self.plane, start_time=third_time,
+                                             end_time=third_time + timedelta(days=60),
+                                             user=self.user)
+        self.view = views.BookingViewSet.as_view({"get": ActionEnum.list.value})
+
+    def test_list_1(self):
+        request = self.factory.get("/", data={"time": "2020-06-01"})
+        force_authenticate(request, self.user)
+        response = self.view(request)
+        self.assertEquals(response.status_code, HTTPStatus.OK)
+        self.assertEquals(len(response.data["results"]), 2)
+
+    def test_list_2(self):
+        request = self.factory.get("/", data={"time": "2020-06-10"})
+        force_authenticate(request, self.user)
+        response = self.view(request)
+        self.assertEquals(response.status_code, HTTPStatus.OK)
+        self.assertEquals(len(response.data["results"]), 2)
+
+    def test_list_3(self):
+        request = self.factory.get("/", data={"time": "2020-07-10"})
+        force_authenticate(request, self.user)
+        response = self.view(request)
+        self.assertEquals(response.status_code, HTTPStatus.OK)
+        self.assertEquals(len(response.data["results"]), 2)
+
+    def test_list_4(self):
+        request = self.factory.get("/", data={"time": "2020-05-10"})
+        force_authenticate(request, self.user)
+        response = self.view(request)
+        self.assertEquals(response.status_code, HTTPStatus.OK)
+        self.assertEquals(len(response.data["results"]), 2)

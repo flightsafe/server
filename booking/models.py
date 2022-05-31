@@ -14,5 +14,9 @@ class BookingRecord(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
 
+    @property
+    def plane_name(self):
+        return self.plane.title
+
     def __str__(self):
         return self.start_time
