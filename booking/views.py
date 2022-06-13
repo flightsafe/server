@@ -39,6 +39,7 @@ class BookingViewSet(viewsets.ModelViewSet):
 
     def create(self, request, *args, **kwargs):
         request.data["user"] = request.user.pk
+        #TODO: Remove this line
         request.data["user"] = User.objects.first().pk
         return super().create(request, *args, **kwargs)
 

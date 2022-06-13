@@ -1,8 +1,9 @@
+from django.contrib.auth.models import User
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import viewsets, permissions
 
 from course.models import Course, Comment, Lesson, LessonHistory
-from course.serializers import CourseSerializer, CommentSerializer, LessonSerializer, LessonHistorySerializer
+from course.serializers import CourseSerializer, CommentSerializer, LessonSerializer, LessonHistorySerializer, LessonHistoryOptionSerializer
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -39,8 +40,14 @@ class LessonHistoryViewSet(viewsets.ModelViewSet):
     serializer_class = LessonHistorySerializer
     filter_backends = [DjangoFilterBackend]
 
+    def get_serializer_class(self):
+        if self.action == "metadata":
+            return LessonHistoryOptionSerializer
+        return super().get_serializer_class()
+
     def create(self, request, *args, **kwargs):
         request.data["student"] = request.user.pk
+        request.data["student"] = User.objects.first().pk
         return super().create(request, *args, **kwargs)
 
 
