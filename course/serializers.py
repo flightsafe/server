@@ -25,3 +25,9 @@ class LessonHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = LessonHistory
         fields = "__all__"
+
+
+class LessonHistoryOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LessonHistory
+        exclude = ["student"]
